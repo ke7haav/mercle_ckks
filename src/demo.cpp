@@ -2,13 +2,13 @@
 // NOTE: compile against OpenFHE (C++). See README for build/run.
 //
 // High-level flow (single binary):
-//  - Generate 1000 random 512-D vectors and 1 query
+//  - Generate 100 random 64-D vectors and 1 query (demo scale)
 //  - Normalize to unit L2
-//  - Setup CKKS multiparty crypto context (threshold)
+//  - Setup CKKS crypto context (simplified for demo)
 //  - Encrypt DB vectors & query
 //  - For each DB vector compute encrypted dot(q,v_i) (cosine)
-//  - Reduce to a single encrypted maximum similarity via pairwise comparisons
-//  - Threshold-decrypt only the final max.
+//  - Reduce to a single encrypted maximum similarity via tournament approach
+//  - Decrypt only the final maximum similarity (privacy-preserving)
 //
 // Important: this code follows OpenFHE examples. Minor API names may differ
 // slightly with your installed OpenFHE version. See comments where change might be needed.
@@ -74,8 +74,8 @@ int main(int argc, char** argv) {
     std::cout << "[+] Plaintext baseline max similarity = " << plain_max
               << " (index " << plain_argmax << ")\n";
 
-    // ============ OpenFHE CKKS context (multiparty) ============
-    std::cout << "[+] Creating CKKS crypto context (multiparty enabled)\n";
+    // ============ OpenFHE CKKS context (simplified for demo) ============
+    std::cout << "[+] Creating CKKS crypto context (simplified for demo)\n";
 
     // Create CC params - the CCParams type for CKKS RNS:
     CCParams<CryptoContextCKKSRNS> ccParams;
@@ -88,7 +88,7 @@ int main(int argc, char** argv) {
 
     CryptoContext<DCRTPoly> cc = GenCryptoContext(ccParams);
 
-    // enable features needed for multiparty CKKS + comparisons
+    // enable features needed for CKKS + comparisons
     cc->Enable(PKE);
     cc->Enable(LEVELEDSHE);
     cc->Enable(MULTIPARTY);

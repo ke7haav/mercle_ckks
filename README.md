@@ -98,5 +98,5 @@ The implementation demonstrates:
 - ✅ Privacy-preserving computation
 - ✅ Encrypted similarity search
 - ✅ Threshold decision without revealing individual similarities
-- ✅ No single party holds full private key
+- ⚠️ Single party holds private key (simplified for demo)
 - ⚠️ Scaled down parameters for demo feasibility
